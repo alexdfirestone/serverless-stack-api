@@ -1,14 +1,20 @@
-export const hello = async (event, context) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: `Go Serverless v1.0! ${(await message({ time: 1, copy: 'Your function executed successfully!'}))}`,
-    }),
+export default function handler(lambda) {
+  return async function (event, context) {
+    let body, statusCode;
+    try { // Run the Lambda
+      body = await lambda(event, context);
+      statusCode = 200;
+    } catch (e) {
+      body = { error: e.message };
+      statusCode = 500;
+    } // Return HTTP response
+    return {
+      statusCode,
+      body: JSON.stringify(body),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
+    };
   };
-};
-
-const message = ({ time, ...rest }) => new Promise((resolve, reject) =>
-  setTimeout(() => {
-    resolve(`${rest.copy} (with a delay)`);
-  }, time * 1000)
-);
+}
