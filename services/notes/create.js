@@ -1,6 +1,6 @@
 import * as uuid from "uuid";
-import handler from "notes-app-api/libs/handler-lib.js";
-import dynamoDb from "notes-app-api/libs/dynamodb-lib.js";
+import handler from "./libs/handler-lib.js";
+import dynamoDb from "./libs/dynamodb-lib.js";
 
 export const main = handler(async (event, context) => {
   const data = JSON.parse(event.body);
